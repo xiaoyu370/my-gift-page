@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一份特别的礼物</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f0f8ff, #e0ffff);
+            overflow: hidden; /* Prevent scrollbars from popping up */
+            position: relative;
+        }
+
+        .initial-container {
+            text-align: center;
+            animation: fadeInScale 2s ease-out forwards;
+        }
+
+        .gift-message {
+            font-size: 3em;
+            color: #ff69b4; /* Hot pink */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .open-button {
+            background-color: #ffb6c1; /* Light pink */
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .open-button:hover {
+            background-color: #ff8fab; /* Slightly darker pink */
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .popup {
+            position: absolute;
+            background-color: #fff0f5; /* Lavender blush */
+            border: 2px solid #ffb6c1; /* Light pink */
+            border-radius: 15px;
+            padding: 15px 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 1.2em;
+            color: #ff69b4;
+            opacity: 0;
+            animation: popupFadeIn 0.5s forwards, popupBob 3s infinite ease-in-out;
+            cursor: default; /* No pointer for persistent popups */
+            z-index: 1000;
+            white-space: nowrap; /* Prevent text wrapping inside popup */
+        }
+
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes popupBob {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="initial-container" id="initialContainer">
+        <div class="gift-message">这有一份给你的礼物！</div>
+        <button class="open-button" id="openGiftButton">打开礼物</button>
+    </div>
+
+    <script>
+        const warmWords = [
+            "你很棒！",
+            "每天都比昨天更好！",
+            "你的笑容是最好的礼物。",
+            "相信自己，你可以做到！",
+            "有你真好！",
+            "世界因你而精彩。",
+            "加油，我支持你！",
+            "愿你每天都充满阳光。",
+            "你值得所有美好。",
+            "小可爱，收到这份温暖了吗？",
+            "你的努力，终将闪耀！",
+            "保持微笑，生活会更甜。",
+            "你是我的小幸运。",
+            "愿你平安喜乐，万事顺遂。",
+            "我永远在你身边。",
+            "你的存在，就是光芒。",
+            "谢谢你来到我身边。",
+            "愿你拥有所有温柔。",
+            "开心每一天！",
+            "你是独一无二的。",
+            "爱你的每一面。"
+        ];
+
+        let popupIntervalId;
+
+        function createPopup() {
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+            popup.textContent = warmWords[Math.floor(Math.random() * warmWords.length)];
+
+            // To prevent popups from appearing off-screen or overlapping too much initially,
+            // we can calculate a safer range, and for persistent popups, we just place them randomly.
+            const maxLeft = window.innerWidth - 250; // Max width approx 250px for popups
+            const maxTop = window.innerHeight - 100; // Max height approx 100px for popups
+
+            const x = Math.random() * maxLeft;
+            const y = Math.random() * maxTop;
+
+            popup.style.left = `${x}px`;
+            popup.style.top = `${y}px`;
+
+            // Add a small delay for animation effect, but faster overall
+            popup.style.animationDelay = `${Math.random() * 0.2}s`;
+
+            document.body.appendChild(popup);
+        }
+
+        document.getElementById('openGiftButton').addEventListener('click', () => {
+            document.getElementById('initialContainer').style.display = 'none'; // Hide initial message and button
+
+            // Start creating popups rapidly
+            popupIntervalId = setInterval(createPopup, 300 + Math.random() * 200); // Create a new popup every 300-500ms
+
+            // Immediately create a few popups to get started
+            for (let i = 0; i < 5; i++) {
+                setTimeout(createPopup, i * 100); // Stagger initial popups
+            }
+        });
+    </script>
+</body>
+</html>
